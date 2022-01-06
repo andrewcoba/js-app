@@ -1,23 +1,22 @@
 
 let pokemonRepository = (function() {
-
-let pokemonList = [
-  {
-    name: "Houndoom",
-    height: "1.4",
-    types: ["dark", "fire"]
-  },
-  {
-    name: "Hitmonchan",
-    height: "1.4",
-    type: ["fighting"]
-  },
-  {
-    name: "Aggron",
-    height: "2.1",
-    types: ["steel", "rock"]
-  },
-];
+  let pokemonList = [
+    {
+      name: "Houndoom",
+      height: "1.4",
+      types: ["dark", "fire"],
+    },
+    {
+      name: "Hitmonchan",
+      height: "1.4",
+      types: ["fighting"],
+    },
+    {
+      name: "Aggron",
+      height: "2.1",
+      types: ["steel", "rock"],
+    },
+  ];
 
 // for (let i = 0; i < pokemonList.length; i++) {
 //   document.write(pokemonList[i].name + "(height: "+pokemonList[i].height+")");
@@ -27,30 +26,57 @@ let pokemonList = [
 //     document.write("<br/>");
 // }
 
-function getAll() {
-  return pokemonList;
-}
-
-function add(newPokemon) {
-  if (typeof newPokemon === 'object') {
-    pokemonList.push(newPokemon);
+  function add(pokemon) {
+    if (
+      typeof pokemon === "object" &&
+      "name" in pokemon &&
+      "height" in pokemon &&
+      "types" in pokemon
+    ) {
+      pokemonList.push(pokemon);
+    } else {
+      console.log("pokemon is not correct");
+    }
   }
-}
-
-    return {
-      getAll: getAll,
-      add: add
-    };
+  function getAll() {
+    return pokemonList;
+  }
+  function showDetails(pokemon) {
+    console.log(pokemon);
+  }
+  function addListItem(pokemon){
+    let pokemonList = document.querySelector(".pokemon-list");
+    let listpokemon = document.createElement("li");
+    let button = document.createElement("button");
+    button.innerText = pokemon.name;
+    button.classList.add("button-class");
+    listpokemon.appendChild(button);
+    pokemonList.appendChild(listpokemon);
+    button.addEventListener("click", function() {
+      showDetails(pokemon)
+    });
+  }
+  return {
+    add: add,
+    getAll: getAll,
+    addListItem: addListItem
+  };
 })();
 
-function printArrayDetails(list) {
-  list.forEach(function(pokemon) {
-    if (pokemon.height >= 2) {
-      document.write('<p>' + pokemon.name + ' (height: ' + pokemon.height + ') - Wow, that\'s big! </p>');
-    } else {
-      document.write('<p>' + pokemon.name + ' (height: ' + pokemon.height + ') </p>');
-    }
-  });
-}
+pokemonRepository.add({ name: "Arbok", height: 3.4, types: ["Poison"] });
 
-printArrayDetails(pokemonRepository.getAll());
+console.log(pokemonRepository.getAll());
+
+// function printArrayDetails(list) {
+//   list.forEach(function(pokemon) {
+//     if (pokemon.height >= 2) {
+//       document.write('<p>' + pokemon.name + ' (height: ' + pokemon.height + ') - Wow, that\'s big! </p>');
+//     } else {
+//       document.write('<p>' + pokemon.name + ' (height: ' + pokemon.height + ') </p>');
+//     }
+//   });
+// }
+
+pokemonRepository.getAll().forEach(function (pokemon) {
+  pokemonRepository.addListItem(pokemon);
+});
