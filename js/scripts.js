@@ -1,22 +1,7 @@
 
 let pokemonRepository = (function() {
-  let pokemonList = [
-    {
-      name: "Houndoom",
-      height: "1.4",
-      types: ["dark", "fire"],
-    },
-    {
-      name: "Hitmonchan",
-      height: "1.4",
-      types: ["fighting"],
-    },
-    {
-      name: "Aggron",
-      height: "2.1",
-      types: ["steel", "rock"],
-    },
-  ];
+  let pokemonList = [];
+  let apiUrl = 'https://pokeapi.co/api/v2/pokemon/';'
 
 // for (let i = 0; i < pokemonList.length; i++) {
 //   document.write(pokemonList[i].name + "(height: "+pokemonList[i].height+")");
@@ -30,20 +15,17 @@ let pokemonRepository = (function() {
     if (
       typeof pokemon === "object" &&
       "name" in pokemon &&
-      "height" in pokemon &&
-      "types" in pokemon
     ) {
       pokemonList.push(pokemon);
     } else {
       console.log("pokemon is not correct");
     }
   }
+
   function getAll() {
     return pokemonList;
   }
-  function showDetails(pokemon) {
-    console.log(pokemon);
-  }
+
   function addListItem(pokemon){
     let pokemonList = document.querySelector(".pokemon-list");
     let listpokemon = document.createElement("li");
@@ -52,20 +34,45 @@ let pokemonRepository = (function() {
     button.classList.add("button-class");
     listpokemon.appendChild(button);
     pokemonList.appendChild(listpokemon);
-    button.addEventListener("click", function() {
-      showDetails(pokemon)
+    button.addEventListener("click", function(event) {
+      showDetails(pokemon);
     });
   }
+
+  function loadDetails(item) {
+    let url = item.detailsUrl;
+    return fetch(url).then(function (response) {
+      return response.json();
+    }).then(function (details) {
+      item.imageUrl = details.sprites.front_default;
+      item.height = details.height;
+      item.types = details.types;
+    }).catch(function (e) {
+      console.error(e);
+    });
+  }
+
+  function showDetails(item) {
+    pokemonRepository.loadDetails(item).then(function () {
+      console.log(item);
+    });
+  }
+
   return {
     add: add,
     getAll: getAll,
-    addListItem: addListItem
+    addListItem: addListItem,
+    loadList: loadList,
+    loadDetails: loadDetails,
+    showDetails: showDetails
   };
 })();
 
-pokemonRepository.add({ name: "Arbok", height: 3.4, types: ["Poison"] });
-
-console.log(pokemonRepository.getAll());
+pokemonRepository.loadList().then(function () {
+  pokemonRepository.getAll().forEach(function (pokemon) {
+    pokemonRepository.addListItem(pokemon);
+  });
+});
 
 // function printArrayDetails(list) {
 //   list.forEach(function(pokemon) {
@@ -76,7 +83,3 @@ console.log(pokemonRepository.getAll());
 //     }
 //   });
 // }
-
-pokemonRepository.getAll().forEach(function (pokemon) {
-  pokemonRepository.addListItem(pokemon);
-});
