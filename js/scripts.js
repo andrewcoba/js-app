@@ -1,7 +1,7 @@
 
 let pokemonRepository = (function() {
   let pokemonList = [];
-  let apiUrl = 'https://pokeapi.co/api/v2/pokemon/';'
+  let apiUrl = 'https://pokeapi.co/api/v2/pokemon/';
 
 // for (let i = 0; i < pokemonList.length; i++) {
 //   document.write(pokemonList[i].name + "(height: "+pokemonList[i].height+")");
@@ -42,7 +42,7 @@ let pokemonRepository = (function() {
   function loadList() {
     return fetch(apiUrl).then(function (response) {
       return response.json();
-    }).then(function.json) {
+    }).then(function(json) {
       json.results.forEach(function (item) {
         let pokemon = {
           name: item.name,
