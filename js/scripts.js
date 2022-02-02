@@ -2,7 +2,7 @@
 let pokemonRepository = (function() {
   let pokemonList = [];
   let apiUrl = 'https://pokeapi.co/api/v2/pokemon/?limit=200';
-  let modalContainer = document.querySelector('#exampleModal'); //change id to #exampleModal if not working
+  let modalContainer = document.querySelector('#exampleModal');
 
   function add(pokemon) {
     if (
@@ -56,9 +56,8 @@ let pokemonRepository = (function() {
           detailsUrl: item.url
         };
         add(pokemon);
-        console.log(pokemon);
       });
-    }).catch(function(e){
+    }).catch(function(e) {
       console.error(e);
     })
   }
@@ -115,7 +114,6 @@ let pokemonRepository = (function() {
     pokemonAbilities.innerText = 'Abilities: ' + abilitiesCon;
 
     modalTitle.append(pokemonName);
-    modalBody.append(pokemonName);
     modalBody.append(pokemonType);
     modalBody.append(pokemonHeight);
     modalBody.append(pokemonImage);
@@ -125,11 +123,38 @@ let pokemonRepository = (function() {
     $('#exampleModal').modal();
   }
 
+  function hideModal () {
+    let modalTitle = $('.modal-title');
+    let modalBody = $('.modal-body');
+
+    while (modalTitle.lastChild) {
+      modalHeader.removeChild(modalHeader.lastChild);
+    }
+
+    while (modalBody.lastChild) {
+      modalBody.removeChild(modalBody.lastChild);
+    }
+    modalContainer.classList.remove('is-visible');
+  }
+
+    window.addEventListener('keydown', (e) => {
+      if(e.key === 'Escape' && modalContainer.classList.contains('is-visible')){
+        hideModal();
+      }
+    });
+
+  modalContainer.addEventListener('click', (e) => {
+    let target = e.target;
+    if (target === modalContainer) {
+      hideModal();
+    }
+  });
+
     $(document).ready(function(){
       $("#search-pokemon").on("keyup", function() {
         var value = $(this).val().toLowerCase();
         $(".button-class").filter(function() {
-          $(this).toggle($(this.text().toLowerCase().indexOf(value) > -1)
+          $(this).toggle($(this.text().toLowerCase().indexOf(value) > -1))
         });
       });
     });
