@@ -62,7 +62,7 @@ let pokemonRepository = (function() {
     })
   }
 
-  function loadDetails(pokemon)/*change item to pokemon if not working*/{
+  function loadDetails(pokemon){
     let url = pokemon.detailsUrl;
     return fetch(url).then(function (response) {
       return response.json();
@@ -72,16 +72,15 @@ let pokemonRepository = (function() {
       pokemon.weight = details.weight;
       pokemon.types = details.types;
       pokemon.abilities = details.abilities;
-      // return pokemon;
+      return pokemon;
     }).catch(function (e) {
       console.error(e);
     });
   }
 
   function showDetails(pokemon) {
-    // pokemonRepository.loadDetails(pokemon).then(function () {
-      loadDetails(pokemon).then(function () {
-        showModal(pokemon);
+      loadDetails(pokemon).then(function (aPokemon) {
+        showModal(aPokemon);
     });
   }
 
@@ -94,7 +93,7 @@ let pokemonRepository = (function() {
 
     let pokemonName = $('<h1>' + pokemon.name + '</h1>');
     let pokemonImage = $('<img class="modal-img" style="width:50%">');
-    pokemonImage.attr('src', pokemon.imageURL);
+    pokemonImage.attr('src', pokemon.imageUrl);
 
     let pokemonType = document.createElement('p');
     let typesCon = ''
@@ -158,36 +157,6 @@ let pokemonRepository = (function() {
         });
       });
     });
-
-  //   modalContainer.classList.add('is-visible');
-  // }
-
-  // function hideModal () {
-  //   let modalHeader = document.querySelector('.modal-header');
-  //   let modalBody = document.querySelector('.modal-body');
-  //
-  //   while (modalHeader.lastChild) {
-  //     modalHeader.removeChild(modalHeader.lastChild);
-  //   }
-  //
-  //   while (modalBody.lastChild) {
-  //     modalBody.removeChild(modalBody.lastChild);
-  //   }
-  //   modalContainer.classList.remove('is-visible');
-  // }
-  //
-  //   window.addEventListener('keydown', (e) => {
-  //     if(e.key === 'Escape' && modalContainer.classList.contains('is-visible')){
-  //       hideModal();
-  //     }
-  //   });
-
-  // modalContainer.addEventListener('click', (e) => {
-  //   let target = e.target;
-  //   if (target === modalContainer) {
-  //     hideModal();
-  //   }
-  // });
 
   return {
     add: add,

@@ -39,7 +39,7 @@ h1 {
 
 .list-container {
   display: table;
-  margin: auto 40px;
+  margin: 5rem 40px auto;
 }
 
 .pokemon-list {
